@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>MedKeep — Reduza faltas e mantenha sua agenda sempre cheia</title>
+<meta name="description" content="MedKeep automatiza confirmações de consulta no WhatsApp. Reduza faltas, aumente o faturamento e libere sua recepção." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+        colors: {
+          brand: {
+            green: '#22C55E',
+            greenDark: '#16A34A',
+            blue: '#38BDF8',
+            blueDark: '#0EA5E9',
+            bg: '#F8FAFC',
+            ink: '#0F172A',
+            muted: '#64748B',
+          }
+        },
+        boxShadow: {
+          soft: '0 10px 30px -12px rgba(15, 23, 42, 0.12)',
+          card: '0 4px 20px -4px rgba(15, 23, 42, 0.08)',
+          glow: '0 20px 60px -20px rgba(34, 197, 94, 0.45)',
+        },
+        borderRadius: { '4xl': '2rem' },
+        animation: {
+          'float': 'float 6s ease-in-out infinite',
+          'fade-up': 'fadeUp 0.7s ease-out both',
+          'pulse-soft': 'pulseSoft 2.5s ease-in-out infinite',
+        },
+        keyframes: {
+          float: { '0%,100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-10px)' } },
+          fadeUp: { '0%': { opacity: 0, transform: 'translateY(20px)' }, '100%': { opacity: 1, transform: 'translateY(0)' } },
+          pulseSoft: { '0%,100%': { opacity: 1 }, '50%': { opacity: 0.6 } },
+        }
+      }
+    }
+  }
+</script>
+<style>
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Inter', sans-serif; background: #F8FAFC; color: #0F172A; -webkit-font-smoothing: antialiased; }
+  .gradient-text { background: linear-gradient(135deg, #22C55E 0%, #38BDF8 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .gradient-bg { background: linear-gradient(135deg, #22C55E 0%, #16A34A 100%); }
+  .hero-blur { background: radial-gradient(circle at 30% 20%, rgba(56,189,248,0.18), transparent 50%), radial-gradient(circle at 80% 60%, rgba(34,197,94,0.18), transparent 50%); }
+  .grid-pattern { background-image: linear-gradient(rgba(15,23,42,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(15,23,42,0.04) 1px, transparent 1px); background-size: 40px 40px; }
+  .reveal { opacity: 0; transform: translateY(24px); transition: all 0.7s ease-out; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .chat-bubble { animation: fadeUp 0.6s ease-out both; }
+  .check-bullet::before { content: '✓'; display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; border-radius: 999px; background: #DCFCE7; color: #16A34A; font-weight: 700; font-size: 12px; margin-right: 12px; flex-shrink: 0; }
+</style>
+</head>
+<body class="bg-brand-bg text-brand-ink">
+
+<!-- NAV -->
+<header class="sticky top-0 z-50 backdrop-blur-lg bg-white/70 border-b border-slate-200/60">
+  <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+    <a href="#" class="flex items-center gap-2">
+      <div class="w-9 h-9 rounded-xl gradient-bg flex items-center justify-center shadow-glow">
+        <i data-lucide="heart-pulse" class="w-5 h-5 text-white"></i>
+      </div>
+      <span class="text-xl font-bold tracking-tight">MedKeep</span>
+    </a>
+    <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-brand-muted">
+      <a href="#problema" class="hover:text-brand-ink transition">Problema</a>
+      <a href="#como-funciona" class="hover:text-brand-ink transition">Como funciona</a>
+      <a href="#beneficios" class="hover:text-brand-ink transition">Benefícios</a>
+      <a href="#precos" class="hover:text-brand-ink transition">Preços</a>
+    </nav>
+    <a href="#cta" class="inline-flex items-center gap-2 bg-brand-ink text-white px-5 py-2.5 rounded-xl text-sm font-semibold hover:bg-slate-800 transition shadow-soft">
+      Teste grátis <i data-lucide="arrow-right" class="w-4 h-4"></i>
+    </a>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="relative overflow-hidden">
+  <div class="absolute inset-0 hero-blur"></div>
+  <div class="absolute inset-0 grid-pattern opacity-60"></div>
+  <div class="relative max-w-7xl mx-auto px-6 pt-20 pb-24 grid lg:grid-cols-2 gap-16 items-center">
+    <div class="reveal">
+      <div class="inline-flex items-center gap-2 bg-white border border-slate-200 px-4 py-2 rounded-full text-sm font-medium text-brand-muted shadow-card mb-6">
+        <span class="w-2 h-2 bg-brand-green rounded-full animate-pulse-soft"></span>
+        Novo: confirmação automática via WhatsApp
+      </div>
+      <h1 class="text-5xl md:text-6xl lg:text-7xl font-extrabold leading-[1.05] tracking-tight">
+        Reduza faltas e mantenha sua agenda <span class="gradient-text">sempre cheia</span>
+      </h1>
+      <p class="mt-6 text-lg md:text-xl text-brand-muted max-w-xl leading-relaxed">
+        Automatize confirmações de consulta no WhatsApp e pare de perder dinheiro com pacientes que não aparecem.
+      </p>
+      <div class="mt-8 flex flex-col sm:flex-row gap-3">
+        <a href="#cta" class="inline-flex items-center justify-center gap-2 gradient-bg text-white px-7 py-4 rounded-2xl font-semibold shadow-glow hover:scale-[1.02] transition">
+          <i data-lucide="message-circle" class="w-5 h-5"></i> Começar teste grátis de 7 dias
+        </a>
+        <a href="#como-funciona" class="inline-flex items-center justify-center gap-2 bg-white border border-slate-200 px-7 py-4 rounded-2xl font-semibold hover:border-slate-300 transition shadow-card">
+          Ver como funciona
+        </a>
+      </div>
+      <div class="mt-8 flex items-center gap-6 text-sm text-brand-muted">
+        <div class="flex items-center gap-2"><i data-lucide="shield-check" class="w-4 h-4 text-brand-green"></i> Sem cartão de crédito</div>
+        <div class="flex items-center gap-2"><i data-lucide="zap" class="w-4 h-4 text-brand-green"></i> Configuração em 5 minutos</div>
+      </div>
+    </div>
+
+    <!-- HERO MOCKUP -->
+    <div class="relative reveal">
+      <div class="absolute -top-8 -right-8 w-72 h-72 bg-brand-green/20 rounded-full blur-3xl"></div>
+      <div class="absolute -bottom-8 -left-8 w-72 h-72 bg-brand-blue/20 rounded-full blur-3xl"></div>
+      <div class="relative bg-white rounded-3xl shadow-soft border border-slate-200 p-6 animate-float">
+        <div class="flex items-center gap-3 pb-4 border-b border-slate-100">
+          <div class="w-10 h-10 rounded-full gradient-bg flex items-center justify-center text-white font-bold">M</div>
+          <div>
+            <div class="font-semibold text-sm">MedKeep • Clínica Vida</div>
+            <div class="text-xs text-brand-muted flex items-center gap-1"><span class="w-1.5 h-1.5 bg-brand-green rounded-full"></span> online</div>
+          </div>
+          <i data-lucide="message-circle-more" class="w-5 h-5 text-brand-green ml-auto"></i>
+        </div>
+        <div class="space-y-3 mt-4">
+          <div class="chat-bubble bg-slate-100 rounded-2xl rounded-tl-sm p-3 max-w-[85%] text-sm">
+            Olá Maria! 👋 Lembrete da sua consulta com <b>Dr. Silva</b> amanhã às <b>14:30</b>. Confirma sua presença?
+          </div>
+          <div class="chat-bubble flex gap-2 justify-end" style="animation-delay:.4s">
+            <button class="bg-brand-green text-white text-xs font-semibold px-3 py-2 rounded-xl shadow-soft">✓ Sim, confirmo</button>
+            <button class="bg-white border border-slate-200 text-xs font-semibold px-3 py-2 rounded-xl">Remarcar</button>
+          </div>
+          <div class="chat-bubble bg-emerald-50 border border-emerald-100 rounded-2xl rounded-tr-sm p-3 max-w-[85%] ml-auto text-sm" style="animation-delay:.8s">
+            Sim, confirmo! ✅
+          </div>
+          <div class="chat-bubble bg-slate-100 rounded-2xl rounded-tl-sm p-3 max-w-[85%] text-sm" style="animation-delay:1.2s">
+            Perfeito! Te esperamos amanhã 💚
+          </div>
+        </div>
+        <div class="mt-5 grid grid-cols-3 gap-2 text-center">
+          <div class="bg-emerald-50 rounded-xl p-3"><div class="text-xl font-bold text-brand-greenDark">94%</div><div class="text-[10px] text-brand-muted uppercase tracking-wide">Confirmadas</div></div>
+          <div class="bg-sky-50 rounded-xl p-3"><div class="text-xl font-bold text-brand-blueDark">+38%</div><div class="text-[10px] text-brand-muted uppercase tracking-wide">Comparecimento</div></div>
+          <div class="bg-slate-50 rounded-xl p-3"><div class="text-xl font-bold text-brand-ink">-72%</div><div class="text-[10px] text-brand-muted uppercase tracking-wide">Faltas</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LOGOS / SOCIAL PROOF -->
+<section class="border-y border-slate-200 bg-white/60">
+  <div class="max-w-7xl mx-auto px-6 py-8 flex flex-wrap items-center justify-center gap-x-12 gap-y-4 text-brand-muted text-sm">
+    <span class="font-medium">Usado por clínicas e consultórios em todo o Brasil</span>
+    <div class="flex items-center gap-1"><i data-lucide="star" class="w-4 h-4 fill-amber-400 text-amber-400"></i><i data-lucide="star" class="w-4 h-4 fill-amber-400 text-amber-400"></i><i data-lucide="star" class="w-4 h-4 fill-amber-400 text-amber-400"></i><i data-lucide="star" class="w-4 h-4 fill-amber-400 text-amber-400"></i><i data-lucide="star" class="w-4 h-4 fill-amber-400 text-amber-400"></i> <span class="ml-2 font-semibold text-brand-ink">4.9/5</span></div>
+    <div class="flex items-center gap-2"><i data-lucide="shield-check" class="w-4 h-4 text-brand-green"></i> LGPD compliant</div>
+    <div class="flex items-center gap-2"><i data-lucide="users" class="w-4 h-4 text-brand-blueDark"></i> +500 profissionais ativos</div>
+  </div>
+</section>
+
+<!-- PROBLEMA -->
+<section id="problema" class="py-24 px-6">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center max-w-3xl mx-auto reveal">
+      <span class="inline-block text-xs font-bold tracking-widest text-rose-500 uppercase mb-3">O problema</span>
+      <h2 class="text-4xl md:text-5xl font-bold tracking-tight">Cada falta é dinheiro saindo do seu caixa</h2>
+      <p class="mt-4 text-lg text-brand-muted">Pacientes que não aparecem custam caro. Sua equipe gasta horas ligando. E mesmo assim, a agenda continua com buracos.</p>
+    </div>
+
+    <div class="mt-16 grid md:grid-cols-3 gap-6">
+      <div class="reveal bg-white rounded-3xl p-8 border border-slate-200 shadow-card hover:shadow-soft transition">
+        <div class="w-12 h-12 rounded-2xl bg-rose-50 flex items-center justify-center mb-5">
+          <i data-lucide="calendar-x" class="w-6 h-6 text-rose-500"></i>
+        </div>
+        <h3 class="text-xl font-bold mb-2">30% de faltas em média</h3>
+        <p class="text-brand-muted">Pacientes esquecem, atrasam ou simplesmente não aparecem — sem aviso.</p>
+      </div>
+      <div class="reveal bg-white rounded-3xl p-8 border border-slate-200 shadow-card hover:shadow-soft transition">
+        <div class="w-12 h-12 rounded-2xl bg-amber-50 flex items-center justify-center mb-5">
+          <i data-lucide="phone-off" class="w-6 h-6 text-amber-500"></i>
+        </div>
+        <h3 class="text-xl font-bold mb-2">Recepção sobrecarregada</h3>
+        <p class="text-brand-muted">Horas perdidas ligando paciente por paciente, sem garantia de resposta.</p>
+      </div>
+      <div class="reveal bg-white rounded-3xl p-8 border border-slate-200 shadow-card hover:shadow-soft transition">
+        <div class="w-12 h-12 rounded-2xl bg-rose-50 flex items-center justify-center mb-5">
+          <i data-lucide="trending-down" class="w-6 h-6 text-rose-500"></i>
+        </div>
+        <h3 class="text-xl font-bold mb-2">Faturamento em queda</h3>
+        <p class="text-brand-muted">4 faltas por semana = R$2.400/mês perdidos. Em 1 ano, mais de R$28 mil.</p>
+      </div>
+    </div>
+
+    <!-- COST BOX -->
+    <div class="reveal mt-12 bg-gradient-to-br from-rose-50 to-amber-50 border border-rose-100 rounded-3xl p-8 md:p-10 grid md:grid-cols-4 gap-6 items-center">
+      <div class="md:col-span-3">
+        <div class="text-sm font-semibold text-rose-600 uppercase tracking-wider mb-2">Faça as contas</div>
+        <h3 class="text-2xl md:text-3xl font-bold">Quanto sua clínica perde com faltas hoje?</h3>
+        <p class="text-brand-muted mt-2">Consulta média de R$150 × 4 faltas/semana = <b class="text-brand-ink">R$2.400/mês perdidos</b>. O MedKeep custa R$149.</p>
+      </div>
+      <a href="#cta" class="bg-brand-ink text-white px-6 py-4 rounded-2xl font-semibold text-center shadow-soft hover:bg-slate-800 transition">Parar de perder dinheiro</a>
+    </div>
+  </div>
+</section>
+
+<!-- SOLUÇÃO -->
+<section class="py-24 px-6 bg-white">
+  <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
+    <div class="reveal order-2 lg:order-1">
+      <div class="relative">
+        <div class="absolute inset-0 gradient-bg rounded-4xl blur-2xl opacity-20"></div>
+        <div class="relative bg-gradient-to-br from-emerald-50 to-sky-50 rounded-4xl p-8 border border-slate-200">
+          <div class="grid grid-cols-2 gap-4">
+            <div class="bg-white rounded-2xl p-5 shadow-card">
+              <i data-lucide="message-square-text" class="w-8 h-8 text-brand-green mb-3"></i>
+              <div class="font-semibold">Lembrete enviado</div>
+              <div class="text-xs text-brand-muted mt-1">Hoje, 09:00</div>
+            </div>
+            <div class="bg-white rounded-2xl p-5 shadow-card">
+              <i data-lucide="check-check" class="w-8 h-8 text-brand-blueDark mb-3"></i>
+              <div class="font-semibold">Confirmação 1-clique</div>
+              <div class="text-xs text-brand-muted mt-1">Resposta automática</div>
+            </div>
+            <div class="bg-white rounded-2xl p-5 shadow-card">
+              <i data-lucide="repeat" class="w-8 h-8 text-brand-green mb-3"></i>
+              <div class="font-semibold">Remarcação fácil</div>
+              <div class="text-xs text-brand-muted mt-1">Direto pelo WhatsApp</div>
+            </div>
+            <div class="bg-white rounded-2xl p-5 shadow-card">
+              <i data-lucide="bar-chart-3" class="w-8 h-8 text-brand-blueDark mb-3"></i>
+              <div class="font-semibold">Dashboard claro</div>
+              <div class="text-xs text-brand-muted mt-1">Tudo em tempo real</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="reveal order-1 lg:order-2">
+      <span class="inline-block text-xs font-bold tracking-widest text-brand-greenDark uppercase mb-3">A solução</span>
+      <h2 class="text-4xl md:text-5xl font-bold tracking-tight">Confirmações automáticas no canal que o paciente já usa</h2>
+      <p class="mt-5 text-lg text-brand-muted">O MedKeep envia lembretes inteligentes pelo WhatsApp, recebe a confirmação com 1 clique e organiza tudo num painel simples — sem você precisar levantar o telefone.</p>
+      <ul class="mt-8 space-y-4 text-base">
+        <li class="flex items-center"><span class="check-bullet"></span> Mensagens automáticas 24h antes da consulta</li>
+        <li class="flex items-center"><span class="check-bullet"></span> Paciente confirma ou remarca sem instalar nada</li>
+        <li class="flex items-center"><span class="check-bullet"></span> Sua agenda atualizada em tempo real</li>
+        <li class="flex items-center"><span class="check-bullet"></span> Personalize o tom de voz da clínica</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- COMO FUNCIONA -->
+<section id="como-funciona" class="py-24 px-6">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center max-w-3xl mx-auto reveal">
+      <span class="inline-block text-xs font-bold tracking-widest text-brand-blueDark uppercase mb-3">Como funciona</span>
+      <h2 class="text-4xl md:text-5xl font-bold tracking-tight">Pronto em 5 minutos. Funciona para sempre.</h2>
+      <p class="mt-4 text-lg text-brand-muted">Nada de instalações complexas ou treinamento longo.</p>
+    </div>
+
+    <div class="mt-16 grid md:grid-cols-4 gap-6 relative">
+      <div class="hidden md:block absolute top-12 left-[12.5%] right-[12.5%] h-0.5 bg-gradient-to-r from-brand-green via-brand-blue to-brand-green"></div>
+      <div class="reveal relative bg-white rounded-3xl p-7 border border-slate-200 shadow-card text-center">
+        <div class="w-12 h-12 rounded-full gradient-bg text-white font-bold flex items-center justify-center mx-auto mb-5 shadow-glow">1</div>
+        <i data-lucide="upload-cloud" class="w-7 h-7 text-brand-green mx-auto mb-3"></i>
+        <h3 class="font-bold text-lg mb-2">Conecte sua agenda</h3>
+        <p class="text-sm text-brand-muted">Importe ou cadastre suas consultas em segundos.</p>
+      </div>
+      <div class="reveal relative bg-white rounded-3xl p-7 border border-slate-200 shadow-card text-center">
+        <div class="w-12 h-12 rounded-full gradient-bg text-white font-bold flex items-center justify-center mx-auto mb-5 shadow-glow">2</div>
+        <i data-lucide="settings-2" class="w-7 h-7 text-brand-green mx-auto mb-3"></i>
+        <h3 class="font-bold text-lg mb-2">Personalize a mensagem</h3>
+        <p class="text-sm text-brand-muted">Escolha o tom, o horário e a frequência dos lembretes.</p>
+      </div>
+      <div class="reveal relative bg-white rounded-3xl p-7 border border-slate-200 shadow-card text-center">
+        <div class="w-12 h-12 rounded-full gradient-bg text-white font-bold flex items-center justify-center mx-auto mb-5 shadow-glow">3</div>
+        <i data-lucide="send" class="w-7 h-7 text-brand-green mx-auto mb-3"></i>
+        <h3 class="font-bold text-lg mb-2">MedKeep envia tudo</h3>
+        <p class="text-sm text-brand-muted">Lembretes saem automaticamente pelo WhatsApp.</p>
+      </div>
+      <div class="reveal relative bg-white rounded-3xl p-7 border border-slate-200 shadow-card text-center">
+        <div class="w-12 h-12 rounded-full gradient-bg text-white font-bold flex items-center justify-center mx-auto mb-5 shadow-glow">4</div>
+        <i data-lucide="calendar-check" class="w-7 h-7 text-brand-green mx-auto mb-3"></i>
+        <h3 class="font-bold text-lg mb-2">Agenda cheia</h3>
+        <p class="text-sm text-brand-muted">Você acompanha confirmações em tempo real.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BENEFÍCIOS -->
+<section id="beneficios" class="py-24 px-6 bg-white">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center max-w-3xl mx-auto reveal">
+      <span class="inline-block text-xs font-bold tracking-widest text-brand-greenDark uppercase mb-3">Benefícios</span>
+      <h2 class="text-4xl md:text-5xl font-bold tracking-tight">Mais pacientes comparecendo. Menos agenda vazia.</h2>
+    </div>
+    <div class="mt-16 grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="reveal bg-brand-bg rounded-3xl p-7 border border-slate-200 hover:border-brand-green/40 hover:shadow-soft transition">
+        <div class="w-12 h-12 rounded-2xl bg-emerald-100 flex items-center justify-center mb-4"><i data-lucide="trending-up" class="w-6 h-6 text-brand-greenDark"></i></div>
+        <h3 class="font-bold text-lg mb-1">Até 70% menos faltas</h3>
+        <p class="text-brand-muted text-sm">Lembretes no momento certo aumentam drasticamente o comparecimento.</p>
+      </div>
+      <div class="reveal bg-brand-bg rounded-3xl p-7 border border-slate-200 hover:border-brand-blue/40 hover:shadow-soft transition">
+        <div class="w-12 h-12 rounded-2xl bg-sky-100 flex items-center justify-center mb-4"><i data-lucide="clock" class="w-6 h-6 text-brand-blueDark"></i></div>
+        <h3 class="font-bold text-lg mb-1">Horas economizadas</h3>
+        <p class="text-brand-muted text-sm">Sua recepção volta a focar em atender — não em ligar.</p>
+      </div>
+      <div class="reveal bg-brand-bg rounded-3xl p-7 border border-slate-200 hover:border-brand-green/40 hover:shadow-soft transition">
+        <div class="w-12 h-12 rounded-2xl bg-emerald-100 flex items-center justify-center mb-4"><i data-lucide="dollar-sign" class="w-6 h-6 text-brand-greenDark"></i></div>
+        <h3 class="font-bold text-lg mb-1">Faturamento maior</h3>
+        <p class="text-brand-muted text-sm">Cada horário ocupado é receita real entrando no caixa.</p>
+      </div>
+      <div class="reveal bg-brand-bg rounded-3xl p-7 border border-slate-200 hover:border-brand-blue/40 hover:shadow-soft transition">
+        <div class="w-12 h-12 rounded-2xl bg-sky-100 flex items-center justify-center mb-4"><i data-lucide="smile" class="w-6 h-6 text-brand-blueDark"></i></div>
+        <h3 class="font-bold text-lg mb-1">Paciente satisfeito</h3>
+        <p class="text-brand-muted text-sm">Comunicação no canal que ele já usa todos os dias.</p>
+      </div>
+      <div class="reveal bg-brand-bg rounded-3xl p-7 border border-slate-200 hover:border-brand-green/40 hover:shadow-soft transition">
+        <div class="w-12 h-12 rounded-2xl bg-emerald-100 flex items-center justify-center mb-4"><i data-lucide="lock" class="w-6 h-6 text-brand-greenDark"></i></div>
+        <h3 class="font-bold text-lg mb-1">Seguro e LGPD</h3>
+        <p class="text-brand-muted text-sm">Dados criptografados e em conformidade com a legislação.</p>
+      </div>
+      <div class="reveal bg-brand-bg rounded-3xl p-7 border border-slate-200 hover:border-brand-blue/40 hover:shadow-soft transition">
+        <div class="w-12 h-12 rounded-2xl bg-sky-100 flex items-center justify-center mb-4"><i data-lucide="layout-dashboard" class="w-6 h-6 text-brand-blueDark"></i></div>
+        <h3 class="font-bold text-lg mb-1">Painel intuitivo</h3>
+        <p class="text-brand-muted text-sm">Veja taxa de confirmação, faltas e desempenho num clique.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PREÇOS -->
+<section id="precos" class="py-24 px-6">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center max-w-3xl mx-auto reveal">
+      <span class="inline-block text-xs font-bold tracking-widest text-brand-greenDark uppercase mb-3">Planos</span>
+      <h2 class="text-4xl md:text-5xl font-bold tracking-tight">Se você evitar 1 ou 2 faltas por mês, <span class="gradient-text">o sistema já se paga</span></h2>
+      <p class="mt-4 text-lg text-brand-muted">Escolha o plano ideal para o tamanho da sua clínica. Sem fidelidade.</p>
+    </div>
+
+    <div class="mt-16 grid md:grid-cols-3 gap-6 items-stretch">
+      <!-- ESSENCIAL -->
+      <div class="reveal bg-white rounded-3xl p-8 border border-slate-200 shadow-card flex flex-col">
+        <div class="text-xs font-bold tracking-widest text-brand-muted uppercase">Essencial</div>
+        <div class="mt-3 flex items-baseline gap-1">
+          <span class="text-5xl font-extrabold">R$149</span><span class="text-brand-muted">/mês</span>
+        </div>
+        <p class="text-sm text-brand-muted mt-2">Para consultórios pequenos que ainda confirmam manualmente.</p>
+        <div class="my-6 h-px bg-slate-100"></div>
+        <ul class="space-y-3 text-sm flex-1">
+          <li class="flex items-start"><i data-lucide="check" class="w-5 h-5 text-brand-green mr-2 flex-shrink-0"></i> Lembretes automáticos via WhatsApp</li>
+          <li class="flex items-start"><i data-lucide="check" class="w-5 h-5 text-brand-green mr-2 flex-shrink-0"></i> Confirmação com 1 clique</li>
+          <li class="flex items-start"><i data-lucide="check" class="w-5 h-5 text-brand-green mr-2 flex-shrink-0"></i> 1 lembrete por consulta (24h antes)</li>
+          <li class="flex items-start"><i data-lucide="check" class="w-5 h-5 text-brand-green mr-2 flex-shrink-0"></i> Dashboard simples</li>
+          <li class="flex items-start"><i data-lucide="check" class="w-5 h-5 text-brand-green mr-2 flex-shrink-0"></i> Suporte básico</li>
+          <li class="flex items-start"><i data-lucide="message-square" class="w-5 h-5 text-brand-blueDark mr-2 flex-shrink-0"></i> Até 200 mensagens/mês</li>
+          <li class="text-xs text-brand-muted pl-7">Excedente: R$0,30 por mensagem</li>
+        </ul>
+        <a href="#cta" class="mt-6 block text-center bg-slate-100 hover:bg-slate-200 text-brand-ink font-semibold py-3.5 rounded-2xl transition">Começar grátis</a>
+      </div>
+
+      <!-- PROFISSIONAL (destaque) -->
+      <div class="reveal relative bg-brand-ink rounded-3xl p-8 shadow-soft flex flex-col text-white scale-100 md:scale-[1.04] z-10">
+        <div class="absolute -top-3 left-1/2 -translate-x-1/2 gradient-bg text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-glow uppercase tracking-wider">Mais vendido</div>
+        <div class="text-xs font-bold tracking-widest text-brand-green uppercase">Profissional</div>
+        <div class="mt-3 flex items-baseline gap-1">
+          <span class="text-5xl font-extrabold">R$249</span><span class="text-slate-400">/mês</span>
+        </div>
+        <p class="text-sm text-slate-300 mt-2">Para clínicas com volume médio que querem reduzir faltas drasticamente.</p>
+        <div class="my-6 h-px bg-white/10"></div>
+        <ul class="space-y-3 text-sm flex-1">
+          <li class="flex items-start"><i data-lucide="check" class="w-5 h-5 text-brand-green mr-2 flex-shrink-0"></i> <b>Tudo do Essencial</b></li>
+          <li class="flex items-start"><i data-lucide="check" class="w-5 h-5 text-brand-green mr-2 flex-shrink-0"></i> 2 lembretes (24h + no dia)</li>
+          <li class="flex items-start"><i data-lucide="check" class="w-5 h-5 text-brand-green mr-2 flex-shrink-0"></i> Follow-up automático</li>
+          <li class="flex items-start"><i data-lucide="check" class="w-5 h-5 text-brand-green mr-2 flex-shrink-0"></i> Remarcação via WhatsApp</li>
+          <li class="flex items-start"><i data-lucide="check" class="w-5 h-5 text-brand-green mr-2 flex-shrink-0"></i> Relatórios completos</li>
+          <li class="flex items-start"><i data-lucide="check" class="w-5 h-5 text-brand-green mr-2 flex-shrink-0"></i> Mensagens personalizadas</li>
+          <li class="flex items-start"><i data-lucide="check" class="w-5 h-5 text-brand-green mr-2 flex-shrink-0"></i> Suporte prioritário</li>
+          <li class="flex items-start"><i data-lucide="message-square" class="w-5 h-5 text-brand-blue mr-2 flex-shrink-0"></i> Até 600 mensagens/mês</li>
+          <li class="text-xs text-slate-400 pl-7">Excedente: R$0,25 por mensagem</li>
+        </ul>
+        <a href="#cta" class="mt-6 block text-center gradient-bg text-white font-semibold py-3.5 rounded-2xl shadow-glow hover:scale-[1.02] transition">Testar 7 dias grátis</a>
+      </div>
+
+      <!-- PREMIUM -->
+      <div class="reveal bg-white rounded-3xl p-8 border border-slate-200 shadow-card flex flex-col">
+        <div class="text-xs font-bold tracking-widest text-brand-blueDark uppercase">Premium</div>
+        <div class="mt-3 flex items-baseline gap-1">
+          <span class="text-5xl font-extrabold">R$399</span><span class="text-brand-muted">/mês</span>
+        </div>
+        <p class="text-sm text-brand-muted mt-2">Para clínicas grandes que querem automação completa.</p>
+        <div class="my-6 h-px bg-slate-100"></div>
+        <ul class="space-y-3 text-sm flex-1">
+          <li class="flex items-start"><i data-lucide="check" class="w-5 h-5 text-brand-green mr-2 flex-shrink-0"></i> <b>Tudo do Profissional</b></li>
+          <li class="flex items-start"><i data-lucide="check" class="w-5 h-5 text-brand-green mr-2 flex-shrink-0"></i> Lembretes ilimitados por consulta</li>
+          <li class="flex items-start"><i data-lucide="check" class="w-5 h-5 text-brand-green mr-2 flex-shrink-0"></i> Fluxos personalizados</li>
+          <li class="flex items-start"><i data-lucide="check" class="w-5 h-5 text-brand-green mr-2 flex-shrink-0"></i> Múltiplos atendentes</li>
+          <li class="flex items-start"><i data-lucide="check" class="w-5 h-5 text-brand-green mr-2 flex-shrink-0"></i> Prioridade no envio</li>
+          <li class="flex items-start"><i data-lucide="check" class="w-5 h-5 text-brand-green mr-2 flex-shrink-0"></i> Integração básica</li>
+          <li class="flex items-start"><i data-lucide="check" class="w-5 h-5 text-brand-green mr-2 flex-shrink-0"></i> Suporte dedicado</li>
+          <li class="flex items-start"><i data-lucide="message-square" class="w-5 h-5 text-brand-blueDark mr-2 flex-shrink-0"></i> Até 1500 mensagens/mês</li>
+          <li class="text-xs text-brand-muted pl-7">Excedente: R$0,20 por mensagem</li>
+        </ul>
+        <a href="#cta" class="mt-6 block text-center bg-slate-100 hover:bg-slate-200 text-brand-ink font-semibold py-3.5 rounded-2xl transition">Falar com vendas</a>
+      </div>
+    </div>
+
+    <p class="text-center text-sm text-brand-muted mt-8">🎁 Todos os planos incluem <b class="text-brand-ink">7 dias grátis</b> ou até 50 mensagens grátis. Sem cartão de crédito.</p>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="py-24 px-6 bg-white">
+  <div class="max-w-3xl mx-auto">
+    <div class="text-center reveal">
+      <h2 class="text-4xl md:text-5xl font-bold tracking-tight">Perguntas frequentes</h2>
+    </div>
+    <div class="mt-12 space-y-4">
+      <details class="reveal group bg-brand-bg rounded-2xl p-6 border border-slate-200 [&_summary::-webkit-details-marker]:hidden">
+        <summary class="flex justify-between items-center cursor-pointer font-semibold">Preciso instalar algum aplicativo? <i data-lucide="plus" class="w-5 h-5 group-open:rotate-45 transition"></i></summary>
+        <p class="mt-3 text-brand-muted text-sm">Não. O MedKeep funciona 100% no navegador, e o paciente recebe as mensagens no WhatsApp que ele já usa.</p>
+      </details>
+      <details class="reveal group bg-brand-bg rounded-2xl p-6 border border-slate-200 [&_summary::-webkit-details-marker]:hidden">
+        <summary class="flex justify-between items-center cursor-pointer font-semibold">Posso cancelar a qualquer momento? <i data-lucide="plus" class="w-5 h-5 group-open:rotate-45 transition"></i></summary>
+        <p class="mt-3 text-brand-muted text-sm">Sim. Sem fidelidade, sem multa. Você cancela direto no painel quando quiser.</p>
+      </details>
+      <details class="reveal group bg-brand-bg rounded-2xl p-6 border border-slate-200 [&_summary::-webkit-details-marker]:hidden">
+        <summary class="flex justify-between items-center cursor-pointer font-semibold">Como funciona o teste grátis? <i data-lucide="plus" class="w-5 h-5 group-open:rotate-45 transition"></i></summary>
+        <p class="mt-3 text-brand-muted text-sm">Você tem 7 dias para usar todas as funcionalidades, ou até 50 mensagens — o que vier primeiro. Sem cartão de crédito.</p>
+      </details>
+      <details class="reveal group bg-brand-bg rounded-2xl p-6 border border-slate-200 [&_summary::-webkit-details-marker]:hidden">
+        <summary class="flex justify-between items-center cursor-pointer font-semibold">É seguro e está em conformidade com a LGPD? <i data-lucide="plus" class="w-5 h-5 group-open:rotate-45 transition"></i></summary>
+        <p class="mt-3 text-brand-muted text-sm">Sim. Os dados dos pacientes são criptografados e tratados conforme as exigências da LGPD.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section id="cta" class="py-24 px-6">
+  <div class="max-w-5xl mx-auto reveal">
+    <div class="relative overflow-hidden rounded-4xl gradient-bg p-12 md:p-16 text-center shadow-glow">
+      <div class="absolute -top-20 -right-20 w-80 h-80 bg-white/10 rounded-full blur-3xl"></div>
+      <div class="absolute -bottom-20 -left-20 w-80 h-80 bg-brand-blue/30 rounded-full blur-3xl"></div>
+      <div class="relative">
+        <div class="inline-flex items-center gap-2 bg-white/15 backdrop-blur text-white text-xs font-bold px-4 py-2 rounded-full uppercase tracking-wider mb-6">
+          <i data-lucide="sparkles" class="w-4 h-4"></i> Comece hoje
+        </div>
+        <h2 class="text-4xl md:text-6xl font-extrabold text-white tracking-tight leading-tight">Pare de perder dinheiro com agenda vazia</h2>
+        <p class="mt-5 text-lg md:text-xl text-white/90 max-w-2xl mx-auto">Configure em 5 minutos. Veja resultados na primeira semana. Cancele quando quiser.</p>
+        <div class="mt-9 flex flex-col sm:flex-row gap-3 justify-center">
+          <a href="#" class="inline-flex items-center justify-center gap-2 bg-white text-brand-ink px-8 py-4 rounded-2xl font-bold shadow-soft hover:scale-[1.02] transition">
+            <i data-lucide="rocket" class="w-5 h-5"></i> Começar teste grátis de 7 dias
+          </a>
+          <a href="#" class="inline-flex items-center justify-center gap-2 bg-white/10 backdrop-blur border border-white/20 text-white px-8 py-4 rounded-2xl font-semibold hover:bg-white/20 transition">
+            Falar com um especialista
+          </a>
+        </div>
+        <div class="mt-8 flex flex-wrap justify-center gap-6 text-sm text-white/80">
+          <div class="flex items-center gap-2"><i data-lucide="check-circle-2" class="w-4 h-4"></i> Sem cartão de crédito</div>
+          <div class="flex items-center gap-2"><i data-lucide="check-circle-2" class="w-4 h-4"></i> Sem fidelidade</div>
+          <div class="flex items-center gap-2"><i data-lucide="check-circle-2" class="w-4 h-4"></i> Suporte humano</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="border-t border-slate-200 py-12 px-6 bg-white">
+  <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+    <div class="flex items-center gap-2">
+      <div class="w-8 h-8 rounded-lg gradient-bg flex items-center justify-center"><i data-lucide="heart-pulse" class="w-4 h-4 text-white"></i></div>
+      <span class="font-bold">MedKeep</span>
+      <span class="text-brand-muted text-sm ml-2">© 2025 — Todos os direitos reservados</span>
+    </div>
+    <div class="flex gap-6 text-sm text-brand-muted">
+      <a href="#" class="hover:text-brand-ink">Termos</a>
+      <a href="#" class="hover:text-brand-ink">Privacidade</a>
+      <a href="#" class="hover:text-brand-ink">Contato</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  lucide.createIcons();
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+</body>
+</html>
