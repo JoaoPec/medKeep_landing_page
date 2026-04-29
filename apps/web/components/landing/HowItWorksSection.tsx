@@ -23,7 +23,7 @@ const steps = [
     n: "3",
     icon: Send,
     title: "MedKeep envia tudo",
-    body: "Lembretes saem automaticamente pelo WhatsApp.",
+    body: "Lembretes e o chatbot para marcar consultas e exames saem automaticamente pelo WhatsApp.",
   },
   {
     n: "4",

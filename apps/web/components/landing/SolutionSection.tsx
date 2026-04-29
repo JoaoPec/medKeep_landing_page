@@ -1,8 +1,8 @@
 import {
   BarChart3,
+  Bot,
   CheckCheck,
   MessageSquareText,
-  Repeat,
 } from "lucide-react";
 import { Reveal } from "./Reveal";
 
@@ -20,9 +20,9 @@ const featureCards = [
     iconClass: "text-brand-blueDark",
   },
   {
-    icon: Repeat,
-    title: "Remarcação fácil",
-    subtitle: "Direto pelo WhatsApp",
+    icon: Bot,
+    title: "Marcação pelo chatbot",
+    subtitle: "Consultas e exames no WhatsApp",
     iconClass: "text-brand-green",
   },
   {
@@ -35,7 +35,7 @@ const featureCards = [
 
 const checklist = [
   "Mensagens automáticas 24h antes de consultas e exames",
-  "Paciente confirma ou remarca sem instalar nada",
+  "Paciente confirma, remarca ou marca novos horários pelo chatbot — sem instalar nada",
   "Sua agenda atualizada em tempo real",
   "Personalize o tom de voz da clínica",
 ];
@@ -73,8 +73,9 @@ export function SolutionSection() {
             </h2>
             <p className="mt-5 text-lg text-brand-muted">
               O MedKeep envia lembretes inteligentes pelo WhatsApp, recebe a
-              confirmação com 1 clique e organiza tudo num painel simples — sem
-              você precisar levantar o telefone.
+              confirmação com 1 clique, permite marcar consultas e exames pelo
+              mesmo chatbot e organiza tudo num painel simples — sem você
+              precisar levantar o telefone.
             </p>
             <ul className="mt-8 space-y-4 text-base">
               {checklist.map((item) => (

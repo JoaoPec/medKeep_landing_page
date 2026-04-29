@@ -12,15 +12,19 @@ export function HeroSection() {
           <div>
             <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-brand-muted shadow-card">
               <span className="h-2 w-2 animate-pulse-soft rounded-full bg-brand-green" />
-              Novo: confirmação automática via WhatsApp
+              Novo: confirmações e marcação via chatbot no WhatsApp
             </div>
             <h1 className="text-5xl font-extrabold leading-[1.05] tracking-tight md:text-6xl lg:text-7xl">
               Reduza faltas e mantenha sua agenda{" "}
               <span className="gradient-text">sempre cheia</span>
             </h1>
             <p className="mt-6 max-w-xl text-lg leading-relaxed text-brand-muted md:text-xl">
-              Automatize confirmações de consultas e exames no WhatsApp e pare de
-              perder dinheiro com pacientes que não aparecem.
+              Automatize confirmações e deixe pacientes{" "}
+              <strong className="font-semibold text-brand-ink">
+                marcarem consultas e exames pelo chatbot
+              </strong>{" "}
+              no WhatsApp — menos faltas e agenda mais preenchida, sem depender
+              só da recepção.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <a
