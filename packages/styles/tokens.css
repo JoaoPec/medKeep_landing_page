@@ -1,0 +1,14 @@
+/* Tokens alinhados com @repo/tailwind-config — usar também fora das classes Tailwind */
+
+:root {
+  --color-brand-green: #22c55e;
+  --color-brand-green-dark: #16a34a;
+  --color-brand-blue: #38bdf8;
+  --color-brand-blue-dark: #0ea5e9;
+  --color-bg-page: #f8fafc;
+  --color-text-primary: #0f172a;
+  --color-text-muted: #64748b;
+
+  --shadow-soft: 0 10px 30px -12px rgba(15, 23, 42, 0.12);
+  --shadow-card: 0 4px 20px -4px rgba(15, 23, 42, 0.08);
+}
