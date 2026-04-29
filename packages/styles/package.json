@@ -1,0 +1,13 @@
+{
+  "name": "@repo/styles",
+  "version": "0.0.0",
+  "private": true,
+  "exports": {
+    "./tokens.css": "./tokens.css",
+    "./themes.css": "./themes.css"
+  },
+  "scripts": {
+    "build": "node -e \"process.exit(0)\"",
+    "lint": "node -e \"process.exit(0)\""
+  }
+}

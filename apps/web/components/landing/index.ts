@@ -1,0 +1,13 @@
+export { BenefitsSection } from "./BenefitsSection";
+export { CtaSection } from "./CtaSection";
+export { FaqSection } from "./FaqSection";
+export { HeroSection } from "./HeroSection";
+export { HeroMockup } from "./HeroMockup";
+export { HowItWorksSection } from "./HowItWorksSection";
+export { PricingSection } from "./PricingSection";
+export { ProblemSection } from "./ProblemSection";
+export { Reveal } from "./Reveal";
+export { SiteFooter } from "./SiteFooter";
+export { SiteHeader } from "./SiteHeader";
+export { SocialProofStrip } from "./SocialProofStrip";
+export { SolutionSection } from "./SolutionSection";
