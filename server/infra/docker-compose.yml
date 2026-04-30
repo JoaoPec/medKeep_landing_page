@@ -1,0 +1,76 @@
+name: medkeep-infra
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: medkeep-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-medkeep}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-medkeep_dev}
+      POSTGRES_DB: ${POSTGRES_DB:-medkeep}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - medkeep_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U medkeep -d medkeep"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  mongo:
+    image: mongo:7
+    container_name: medkeep-mongo
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER:-medkeep}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD:-medkeep_dev}
+    ports:
+      - "${MONGO_PORT:-27017}:27017"
+    volumes:
+      - medkeep_mongodata:/data/db
+    healthcheck:
+      test:
+        ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+  redis:
+    image: redis:7-alpine
+    container_name: medkeep-redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - medkeep_redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  pgadmin:
+    image: dpage/pgadmin4:8
+    container_name: medkeep-pgadmin
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL:-admin@medkeep.local}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD:-admin}
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+      PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: "False"
+    ports:
+      - "${PGADMIN_PORT:-5050}:80"
+    volumes:
+      - medkeep_pgadmin:/var/lib/pgadmin
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  medkeep_pgdata:
+  medkeep_mongodata:
+  medkeep_redisdata:
+  medkeep_pgadmin:
