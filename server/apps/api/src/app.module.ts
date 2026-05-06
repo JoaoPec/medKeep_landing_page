@@ -1,7 +1,9 @@
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
+import { DatabaseModule } from "@medkeep/common/database";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
+import { UsersModule } from "./users/users.module";
 
 @Module({
   imports: [
@@ -9,6 +11,8 @@ import { AppService } from "./app.service";
       isGlobal: true,
       envFilePath: [".env", "../.env", "../../.env"],
     }),
+    DatabaseModule.forRoot(),
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],

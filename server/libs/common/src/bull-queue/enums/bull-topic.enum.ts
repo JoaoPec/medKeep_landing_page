@@ -1,0 +1,17 @@
+export enum BullTopic {
+  ActivityLog = 'activity_log',
+  UsersSync = 'user_sync',
+  Invoice = 'invoice',
+  InvoiceCompany = 'invoice-company',
+  UnauthorizedUser = 'unauthorized_user',
+  Invoice_Failed = 'invoice_failed',
+  InvoiceProcess = 'invoice_renewal',
+  Mailer = 'mailer',
+  KCY = 'kcy',
+  S3_UPLOAD_QUEUE = 's3-uploads',
+  Boost = 'boost',
+  ContentReports = 'content_reports',
+  BugReports = 'bug_reports',
+  SupportTickets = 'support_tickets',
+  UserNotifications = 'user_notifications',
+}
